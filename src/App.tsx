@@ -5,14 +5,43 @@ import Register from './Components/Register.tsx';
 import { AuthProvider, useAuth } from './hooks/useAuth.tsx';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return isAuthenticated ? children : <Navigate to="/login" />;
+};
+
+const PublicRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return isAuthenticated ? <Navigate to="/" /> : children;
 };
 
 const AppRoutes = () => (
   <Routes>
-    <Route element={<Login />} path="/login" />
-    <Route element={<Register />} path="/register" />
+    <Route
+      element={
+        <PublicRoute>
+          <Login />
+        </PublicRoute>
+      }
+      path="/login"
+    />
+    <Route
+      element={
+        <PublicRoute>
+          <Register />
+        </PublicRoute>
+      }
+      path="/register"
+    />
     <Route
       element={
         <ProtectedRoute>
