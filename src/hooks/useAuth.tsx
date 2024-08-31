@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
   isAuthenticated: boolean;
+  loading: boolean;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
   register: (username: string, password: string) => Promise<void>;
@@ -15,6 +16,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,7 +25,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setToken(storedToken);
       setIsAuthenticated(true);
       axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+    } else {
+      setIsAuthenticated(false);
+      delete axios.defaults.headers.common['Authorization'];
     }
+    setLoading(false);
   }, []);
 
   const login = async (username: string, password: string) => {
@@ -80,7 +86,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, login, logout, register, token }}
+      value={{ isAuthenticated, loading, login, logout, register, token }}
     >
       {children}
     </AuthContext.Provider>
