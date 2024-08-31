@@ -5,6 +5,7 @@ import { useAuth } from '../hooks/useAuth.tsx';
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -12,7 +13,7 @@ const Login = () => {
     try {
       await login(username, password);
     } catch {
-      alert('Login Failed');
+      setError('Your username or password might be wrong');
     }
   };
 
@@ -46,6 +47,7 @@ const Login = () => {
             value={password}
           />
         </div>
+        {error && <p className="mb-4 text-red-500">{error}</p>}
         <button
           className="w-full rounded bg-pink-500 px-4 py-2 text-white hover:bg-pink-600"
           type="submit"
