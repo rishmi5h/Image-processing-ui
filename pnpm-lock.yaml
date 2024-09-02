@@ -1,4 +1,4 @@
-lockfileVersion: 5.3
+lockfileVersion: 6.11.0
 
 specifiers:
   '@ianvs/prettier-plugin-sort-imports': ^4.2.1
