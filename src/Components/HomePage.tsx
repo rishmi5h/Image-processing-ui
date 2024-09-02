@@ -40,6 +40,12 @@ const HomePage = () => {
           >
             Transform
           </Link>
+          <Link
+            className="text-white transition duration-300 hover:text-pink-500"
+            to="/convert"
+          >
+            Convert
+          </Link>
           <div className="relative">
             <button
               className="rounded-full bg-neutral-700 p-2 hover:bg-neutral-600"
