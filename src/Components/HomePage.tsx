@@ -4,6 +4,8 @@ import Navbar from './Navbar.tsx';
 
 const HomePage = () => {
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
 
   const handleImageUploadLocal = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,15 +31,25 @@ const HomePage = () => {
     [],
   );
 
-  const handleImageUpload = useCallback(() => {
+  const handleImageUpload = useCallback(async () => {
     if (uploadedImage) {
       const formData = new FormData();
       formData.append('file', uploadedImage);
-      axios.post('http://localhost:8080/images', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      try {
+        const response = await axios.post(
+          'http://localhost:8080/images',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        );
+        setUploadSuccess(true);
+        setUploadedImageUrl(response.data.imageUrl); // Assuming the server returns the image URL
+      } catch {
+        setUploadSuccess(false);
+      }
     }
   }, [uploadedImage]);
 
@@ -69,6 +81,20 @@ const HomePage = () => {
           >
             Upload Image
           </button>
+
+          {uploadSuccess && (
+            <div className="mt-4 text-center text-green-500">
+              Image uploaded successfully!
+            </div>
+          )}
+
+          {uploadedImageUrl && (
+            <div className="mt-6">
+              <h3 className="mb-2 text-center text-xl font-bold">Edit Image</h3>
+              <img alt="Uploaded" className="w-full" src={uploadedImageUrl} />
+              {/* Add image editing controls here */}
+            </div>
+          )}
         </div>
       </div>
     </div>
