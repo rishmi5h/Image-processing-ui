@@ -19,17 +19,41 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const validateToken = async (token: string) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/validate-token',
+        { token },
+      );
+      return response.data.isValid;
+    } catch {
+      return false;
+    }
+  };
+
+  const checkAuthStatus = async () => {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
-      setToken(storedToken);
-      setIsAuthenticated(true);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+      const isValid = await validateToken(storedToken);
+      if (isValid) {
+        setToken(storedToken);
+        setIsAuthenticated(true);
+        axios.defaults.headers.common['Authorization'] =
+          `Bearer ${storedToken}`;
+      } else {
+        logout();
+      }
     } else {
-      setIsAuthenticated(false);
-      delete axios.defaults.headers.common['Authorization'];
+      logout();
     }
     setLoading(false);
+  };
+
+  useEffect(() => {
+    checkAuthStatus();
+    // Set up periodic token validation
+    const intervalId = setInterval(checkAuthStatus, 5 * 60 * 1000); // Check every 5 minutes
+    return () => clearInterval(intervalId);
   }, []);
 
   const login = async (username: string, password: string) => {
