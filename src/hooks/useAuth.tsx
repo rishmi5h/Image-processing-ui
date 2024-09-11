@@ -20,27 +20,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const validateToken = async (token: string) => {
-    try {
-      const response = await axios.post(baseUrl + '/validate-token', { token });
-      return response.data.isValid;
-    } catch {
-      return false;
-    }
-  };
-
   const checkAuthStatus = async () => {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
-      const isValid = await validateToken(storedToken);
-      if (isValid) {
-        setToken(storedToken);
-        setIsAuthenticated(true);
-        axios.defaults.headers.common['Authorization'] =
-          `Bearer ${storedToken}`;
-      } else {
-        logout();
-      }
+      setToken(storedToken);
+      setIsAuthenticated(true);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
     } else {
       logout();
     }
