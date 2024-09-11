@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { baseUrl } from '../api/getUrl.tsx';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -21,10 +22,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const validateToken = async (token: string) => {
     try {
-      const response = await axios.post(
-        'http://localhost:8080/validate-token',
-        { token },
-      );
+      const response = await axios.post(baseUrl + '/validate-token', { token });
       return response.data.isValid;
     } catch {
       return false;
@@ -59,7 +57,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = async (username: string, password: string) => {
     try {
       const response = await axios.post(
-        'http://localhost:8080/login',
+        baseUrl + '/login',
         { password, username },
         { headers: { Authorization: '' } },
       );
@@ -81,7 +79,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const register = async (username: string, password: string) => {
     try {
       const response = await axios.post(
-        'http://localhost:8080/register',
+        baseUrl + '/register',
         { password, username },
         { headers: { Authorization: '' } },
       );
