@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useCallback, useState } from 'react';
+import { baseUrl } from '../api/getUrl.tsx';
 import Navbar from './Navbar.tsx';
 
 const HomePage = () => {
@@ -36,15 +37,11 @@ const HomePage = () => {
       const formData = new FormData();
       formData.append('file', uploadedImage);
       try {
-        const response = await axios.post(
-          'http://localhost:8080/images',
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
+        const response = await axios.post(baseUrl + '/images', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
           },
-        );
+        });
         setUploadSuccess(true);
         setUploadedImageUrl(response.data.imageUrl); // Assuming the server returns the image URL
       } catch {
