@@ -1,10 +1,10 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import ConvertPage from './Components/ConevertPage.tsx';
-import HomePage from './Components/HomePage.tsx';
 import Login from './Components/Login.tsx';
 import Register from './Components/Register.tsx';
-import TransformPage from './Components/TransformPage.tsx';
 import { AuthProvider, useAuth } from './hooks/useAuth.tsx';
+import ConvertPage from './pages/ConevertPage.tsx';
+import HomePage from './pages/HomePage.tsx';
+import TransformPage from './pages/TransformPage.tsx';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, loading } = useAuth();
