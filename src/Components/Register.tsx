@@ -28,6 +28,7 @@ const Register = () => {
             className="w-full rounded border px-3 py-2 dark:border-neutral-600 dark:bg-neutral-700"
             id="username"
             onChange={(e) => setUsername(e.target.value)}
+            placeholder="Enter Username"
             required
             type="username"
             value={username}
@@ -41,6 +42,7 @@ const Register = () => {
             className="w-full rounded border px-3 py-2 dark:border-neutral-600 dark:bg-neutral-700"
             id="password"
             onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter Password"
             required
             type="password"
             value={password}
