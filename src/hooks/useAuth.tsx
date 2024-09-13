@@ -88,7 +88,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setToken(null);
     setIsAuthenticated(false);
     delete axios.defaults.headers.common['Authorization'];
-    navigate('/login');
+    navigate('/landing');
   };
 
   return (
