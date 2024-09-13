@@ -24,7 +24,7 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
     return <div>Loading...</div>;
   }
 
-  return isAuthenticated ? <Navigate to="/" /> : children;
+  return isAuthenticated ? <Navigate to="/Home" /> : children;
 };
 
 const AppRoutes = () => (
@@ -51,7 +51,7 @@ const AppRoutes = () => (
           <HomePage />
         </ProtectedRoute>
       }
-      path="/"
+      path="/Home"
     />
     <Route
       element={
@@ -75,7 +75,7 @@ const AppRoutes = () => (
           <LandingPage />
         </PublicRoute>
       }
-      path="/landing"
+      path="/"
     />
   </Routes>
 );
