@@ -11,13 +11,13 @@ const Navbar: React.FC = () => {
       <h2 className="text-xl font-bold">Imagery</h2>
       <div className="flex items-center space-x-4">
         <Link
-          className="text-white transition duration-300 hover:text-pink-500"
+          className="text-white transition duration-300 hover:text-purple-500"
           to="/transform"
         >
           Transform
         </Link>
         <Link
-          className="text-white transition duration-300 hover:text-pink-500"
+          className="text-white transition duration-300 hover:text-purple-500"
           to="/convert"
         >
           Convert
