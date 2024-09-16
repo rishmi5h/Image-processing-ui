@@ -47,26 +47,6 @@ const LandingPage = () => {
             </Link>
           </div>
         </section>
-        <section className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2">
-          <div className="flex flex-col items-center rounded-lg bg-neutral-800 p-6 shadow-lg">
-            <h3 className="mt-4 text-2xl font-bold text-purple-500">
-              Transform Images
-            </h3>
-            <p className="mt-2 text-center">
-              Use our powerful tools to transform your images. Resize, crop,
-              rotate, and apply various filters to make your images stand out.
-            </p>
-          </div>
-          <div className="flex flex-col items-center rounded-lg bg-neutral-800 p-6 shadow-lg">
-            <h3 className="mt-4 text-2xl font-bold text-purple-500">
-              Convert Images
-            </h3>
-            <p className="mt-2 text-center">
-              Convert your images to different formats with ease. We support a
-              wide range of formats to ensure compatibility with all your needs.
-            </p>
-          </div>
-        </section>
       </main>
       <footer className="bg-neutral-800 bg-opacity-75 p-4 text-center text-neutral-500">
         &copy; 2024 Imagery. All rights reserved.
