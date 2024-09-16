@@ -1,25 +1,33 @@
 import React from 'react';
+import { FaApple, FaDownload, FaHeart, FaListAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import logo from '../assets/logo.svg'; // Add your logo image here
 
 const LandingPage = () => {
   return (
     <div className="flex min-h-screen flex-col bg-cover bg-center text-white">
-      <header className="bg-neutral-800 bg-opacity-75 p-4 shadow-lg">
+      <header className="bg-neutral-900 p-4 shadow-lg">
         <div className="container mx-auto flex items-center justify-between">
-          <h1 className="text-4xl font-bold text-pink-500">Imagery</h1>
-          <nav className="flex space-x-4">
-            <Link className="text-white hover:text-pink-500" to="/login">
-              Login
+          <div className="flex items-center space-x-2">
+            {/* <img src={logo} alt="Imagery Logo" className="h-8 w-8" /> */}
+            <h1 className="text-2xl font-bold">Imagery</h1>
+          </div>
+          <nav className="flex items-center space-x-4">
+            <Link className="text-white hover:text-purple-500" to="/love">
+              <FaHeart className="mr-1 inline-block" /> Love
             </Link>
-            <Link className="text-white hover:text-pink-500" to="/register">
-              Register
+            <Link className="text-white hover:text-purple-500" to="/ios">
+              <FaApple className="mr-1 inline-block" /> iOS
+            </Link>
+            <Link className="text-white hover:text-purple-500" to="/changelog">
+              <FaListAlt className="mr-1 inline-block" /> Changelog
             </Link>
           </nav>
         </div>
       </header>
       <main className="flex flex-1 flex-col items-center justify-center bg-neutral-900 bg-opacity-75 p-8">
         <section className="max-w-4xl text-center">
-          <h2 className="text-5xl font-bold text-pink-500">
+          <h2 className="text-5xl font-bold text-purple-500">
             Welcome to Imagery
           </h2>
           <p className="mt-6 text-lg">
@@ -29,22 +37,22 @@ const LandingPage = () => {
           </p>
           <div className="mt-8 flex justify-center space-x-4">
             <Link
-              className="rounded bg-pink-600 px-6 py-3 text-lg font-semibold text-white hover:bg-pink-700"
+              className="rounded bg-purple-600 px-6 py-3 text-lg font-semibold text-white hover:bg-purple-700"
               to="/register"
             >
               Get Started
             </Link>
             <Link
-              className="rounded border border-pink-600 px-6 py-3 text-lg font-semibold text-pink-600 hover:bg-pink-600 hover:text-white"
+              className="rounded border border-purple-600 px-6 py-3 text-lg font-semibold text-purple-600 hover:bg-purple-600 hover:text-white"
               to="/login"
             >
               Login
             </Link>
           </div>
         </section>
-        <section className="mt-16 grid grid-cols-1 gap-8">
+        <section className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2">
           <div className="flex flex-col items-center rounded-lg bg-neutral-800 p-6 shadow-lg">
-            <h3 className="mt-4 text-2xl font-bold text-pink-500">
+            <h3 className="mt-4 text-2xl font-bold text-purple-500">
               Transform Images
             </h3>
             <p className="mt-2 text-center">
@@ -53,7 +61,7 @@ const LandingPage = () => {
             </p>
           </div>
           <div className="flex flex-col items-center rounded-lg bg-neutral-800 p-6 shadow-lg">
-            <h3 className="mt-4 text-2xl font-bold text-pink-500">
+            <h3 className="mt-4 text-2xl font-bold text-purple-500">
               Convert Images
             </h3>
             <p className="mt-2 text-center">
