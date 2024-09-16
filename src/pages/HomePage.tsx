@@ -55,7 +55,7 @@ const HomePage = () => {
       <Navbar />
       <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-900 p-4">
         <div className="w-full max-w-md rounded-lg bg-neutral-800 p-8 shadow-xl">
-          <h2 className="mb-6 text-center text-2xl font-bold text-pink-500">
+          <h2 className="mb-6 text-center text-2xl font-bold text-purple-500">
             Image Processing
           </h2>
 
@@ -64,7 +64,7 @@ const HomePage = () => {
           </label>
           <input
             accept="image/*"
-            className="mb-6 w-full cursor-pointer rounded-md bg-pink-600 px-4 py-2 text-white transition duration-300 ease-in-out hover:bg-pink-700"
+            className="mb-6 w-full cursor-pointer rounded-md bg-purple-600 px-4 py-2 text-white transition duration-300 ease-in-out hover:bg-purple-700"
             id="imageInput"
             onChange={handleImageUploadLocal}
             type="file"
@@ -73,7 +73,7 @@ const HomePage = () => {
           <div className="mt-4 flex justify-center" id="imagePreview"></div>
 
           <button
-            className="mt-6 w-full rounded-md bg-pink-600 px-4 py-2 text-white transition duration-300 ease-in-out hover:bg-pink-700"
+            className="mt-6 w-full rounded-md bg-purple-600 px-4 py-2 text-white transition duration-300 ease-in-out hover:bg-purple-700"
             onClick={handleImageUpload}
           >
             Upload Image
