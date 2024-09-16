@@ -13,14 +13,11 @@ const LandingPage = () => {
             <h1 className="text-2xl font-bold">Imagery</h1>
           </div>
           <nav className="flex items-center space-x-4">
-            <Link className="text-white hover:text-purple-500" to="/love">
-              <FaHeart className="mr-1 inline-block" /> Love
+            <Link className="text-white hover:text-purple-500" to="/register">
+              Register
             </Link>
-            <Link className="text-white hover:text-purple-500" to="/ios">
-              <FaApple className="mr-1 inline-block" /> iOS
-            </Link>
-            <Link className="text-white hover:text-purple-500" to="/changelog">
-              <FaListAlt className="mr-1 inline-block" /> Changelog
+            <Link className="text-white hover:text-purple-500" to="/login">
+              Login
             </Link>
           </nav>
         </div>
