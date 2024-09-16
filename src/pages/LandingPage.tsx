@@ -29,8 +29,7 @@ const LandingPage = () => {
           </h2>
           <p className="mt-6 text-lg">
             Imagery is your one-stop solution for transforming and converting
-            images with ease. Whether you need to resize, crop, or apply
-            filters, Imagery has got you covered.
+            images with ease.
           </p>
           <div className="mt-8 flex justify-center space-x-4">
             <Link
