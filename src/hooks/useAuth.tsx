@@ -70,11 +70,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       );
       const token = response.data;
       if (token) {
-        localStorage.setItem('token', token);
-        setToken(token);
-        setIsAuthenticated(true);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        navigate('/login');
+        // Don't set token or authenticate here
+        // Delay navigation to show the success message
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
       } else {
         throw new Error('No token received');
       }
