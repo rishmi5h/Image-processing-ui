@@ -6,14 +6,19 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       await login(username, password);
+      // Login successful, you might want to redirect here
     } catch {
       setError('Your username or password might be wrong');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -51,10 +56,18 @@ const Login = () => {
         </div>
         {error && <p className="mb-4 text-red-500">{error}</p>}
         <button
-          className="w-full rounded bg-purple-500 px-4 py-2 text-white hover:bg-purple-600"
+          className="w-full rounded bg-purple-500 px-4 py-2 text-white hover:bg-purple-600 disabled:bg-purple-300"
           type="submit"
+          disabled={isLoading}
         >
-          Login
+          {isLoading ? (
+            <div className="flex items-center justify-center">
+              <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+              <span className="ml-2">Logging in...</span>
+            </div>
+          ) : (
+            'Login'
+          )}
         </button>
       </form>
       <div className="mt-4 text-center">
