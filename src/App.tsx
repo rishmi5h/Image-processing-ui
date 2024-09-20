@@ -2,7 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Login from './Components/Login.tsx';
 import Register from './Components/Register.tsx';
 import { AuthProvider, useAuth } from './hooks/useAuth.tsx';
-// import ConvertPage from './';
+import ConvertPage from './pages/ConevertPage.tsx';
 import HomePage from './pages/HomePage.tsx';
 import LandingPage from './pages/LandingPage.tsx';
 import TransformPage from './pages/TransformPage.tsx';
@@ -61,14 +61,14 @@ const AppRoutes = () => (
       }
       path="/transform"
     />
-    {/* <Route
+    <Route
       element={
         <ProtectedRoute>
           <ConvertPage />
         </ProtectedRoute>
       }
       path="/convert"
-    /> */}
+    />
     <Route
       element={
         <PublicRoute>
