@@ -86,7 +86,6 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <AppRoutes />
-        <Footer />
       </AuthProvider>
     </BrowserRouter>
   );

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useCallback, useState } from 'react';
+import Footer from '../Components/Footer.tsx';
 import Navbar from '../Components/Navbar.tsx';
 
 const ConvertPage = () => {
@@ -117,6 +118,7 @@ const ConvertPage = () => {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 };

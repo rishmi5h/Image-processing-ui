@@ -2,6 +2,7 @@ import React from 'react';
 import { FaApple, FaDownload, FaHeart, FaListAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.svg'; // Add your logo image here
+import Footer from '../Components/Footer.tsx';
 
 const LandingPage = () => {
   return (
@@ -47,6 +48,7 @@ const LandingPage = () => {
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 };

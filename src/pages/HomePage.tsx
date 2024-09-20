@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useCallback, useState } from 'react';
 import { baseUrl } from '../api/getUrl.tsx';
+import Footer from '../Components/Footer.tsx';
 import Navbar from '../Components/Navbar.tsx';
 
 const HomePage = () => {
@@ -94,6 +95,7 @@ const HomePage = () => {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
