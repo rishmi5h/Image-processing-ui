@@ -13,7 +13,7 @@ const HomePage = () => {
       const file = event.target.files?.[0];
       if (file) {
         setUploadedImage(file);
-        // Process the file here (e.g., upload to server, display preview)
+
         const reader = new FileReader();
         reader.onload = (e) => {
           const img = document.createElement('img');
