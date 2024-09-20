@@ -8,7 +8,12 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="mb-4 flex items-center justify-between bg-neutral-800 p-4">
-      <h2 className="text-xl font-bold">Imagery</h2>
+      <Link
+        className="text-xl font-bold text-white transition duration-300 hover:text-purple-500"
+        to="/"
+      >
+        Imagery
+      </Link>
       <div className="flex items-center space-x-4">
         <Link
           className="text-white transition duration-300 hover:text-purple-500"
