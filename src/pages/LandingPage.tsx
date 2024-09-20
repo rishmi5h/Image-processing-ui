@@ -47,9 +47,6 @@ const LandingPage = () => {
           </div>
         </section>
       </main>
-      <footer className="bg-neutral-800 bg-opacity-75 p-4 text-center text-neutral-500">
-        &copy; 2024 Imagery. All rights reserved.
-      </footer>
     </div>
   );
 };
