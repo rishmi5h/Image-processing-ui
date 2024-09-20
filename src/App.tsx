@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import Footer from './Components/Footer.tsx';
 import Login from './Components/Login.tsx';
 import Register from './Components/Register.tsx';
 import { AuthProvider, useAuth } from './hooks/useAuth.tsx';
@@ -85,6 +86,7 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <AppRoutes />
+        <Footer />
       </AuthProvider>
     </BrowserRouter>
   );
