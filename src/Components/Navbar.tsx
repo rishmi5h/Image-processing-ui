@@ -6,6 +6,10 @@ import { useAuth } from '../hooks/useAuth.tsx';
 const Navbar: React.FC = () => {
   const { logout } = useAuth();
 
+  const isActive = (path: string) => {
+    return location.pathname === path ? 'text-purple-500' : 'text-white';
+  };
+
   return (
     <nav className="mb-4 flex items-center justify-between bg-neutral-800 p-4">
       <Link
@@ -16,13 +20,13 @@ const Navbar: React.FC = () => {
       </Link>
       <div className="flex items-center space-x-4">
         <Link
-          className="text-white transition duration-300 hover:text-purple-500"
+          className={`${isActive('/transform')} transition duration-300 hover:text-purple-500`}
           to="/transform"
         >
           Transform
         </Link>
         <Link
-          className="text-white transition duration-300 hover:text-purple-500"
+          className={` ${isActive('/convert')} transition duration-300 hover:text-purple-500`}
           to="/convert"
         >
           Convert
