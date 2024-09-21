@@ -1,11 +1,11 @@
 import React from 'react';
 import { FaUserCircle } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.tsx';
 
 const Navbar: React.FC = () => {
   const { logout } = useAuth();
-
+  const location = useLocation();
   const isActive = (path: string) => {
     return location.pathname === path ? 'text-purple-500' : 'text-white';
   };
