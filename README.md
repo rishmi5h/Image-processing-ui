@@ -1,51 +1,94 @@
-# Starter Kit for Vite, React, TypeScript, Tailwind and Node.js ESM
+# Imagery - Image Processing Web Application
 
-_Minimal, sensible defaults, fast._
+Imagery is a web application that allows users to upload, transform, and convert images with ease. It provides a user-friendly interface for various image processing tasks.
 
-Read [the blog post about this template](https://cpojer.net/posts/fastest-frontend-tooling-in-2022).
+## Features
 
-## Technologies
+- User authentication (Register/Login)
+- Image upload and preview
+- Image conversion to different formats (JPG, PNG, WebP, GIF)
+- Image transformation (coming soon)
 
-- [Vite](https://vitejs.dev/)
-- [React](https://reactjs.org/)
-- [TypeScript](https://www.typescriptlang.org)
-- [Tailwind](https://tailwindcss.com/)
-- [pnpm](https://pnpm.io/ja/) (_Optional_)
+## Technologies Used
 
-![screenshot of `App.tsx`](./screenshot.png)
+- React
+- TypeScript
+- Tailwind CSS
+- Axios for API requests
+- React Router for navigation
 
-## Setup
+## Getting Started
 
-- Press the "Use this template" on the top of this repository's GitHub page.
-- Run `pnpm install` (or `npm install` if you don't use `pnpm`).
-- `pnpm dev` for development.
-- Use `pnpm test` to run tests.
-- `pnpm build` for production builds.
+### Prerequisites
 
-_Note: You can install `pnpm` via `homebrew` on macOS: `brew install pnpm`._
+- Node.js (v14 or later recommended)
+- npm or yarn or pnpm package manager
 
-## Protips for the fastest Developer Experience
+### Installation
 
-- Use [`npm-run-all`](https://github.com/mysticatea/npm-run-all) to parallelize local test runs.
-- Prettier and eslint have `--cache` flags. Use them!
-- Do not run prettier inside of `eslint`. It commonly takes 50% of the eslint runtime!
-- Automatically sort imports when running prettier/saving the document via [`@ianvs/prettier-plugin-sort-imports`](https://github.com/ianvs/prettier-plugin-sort-imports).
-- Use `swc` with `ts-node` for fast node scripts with [ESM](https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/). See below ↓
+1. Clone the repository:
 
-## Run node scripts with ESM and TypeScript, fast.
+   ```
+   git clone https://github.com/your-username/imagery.git
+   cd imagery
+   ```
 
-Create a `script.ts` file, run `chmod x script.ts` and execute it via `./script.ts`.
+2. Install dependencies:
 
-```
-#!/usr/bin/env node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm
+   ```
+   npm install
+   ```
 
-console.log('Your code goes here.');
-```
+   or
 
-Use this to restart your scripts instantly when a file changes:
+   ```
+   yarn install
+   ```
 
-```
-#!/usr/bin/env NODE_ENV=development node --watch --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm
+   or
 
-console.log('This processes instantly restarts when a file changes.');
-```
+   ```
+   pnpm install
+   ```
+
+3. Start the development server:
+
+   ```
+   npm run dev
+   ```
+
+   or
+
+   ```
+   yarn dev
+   ```
+
+   or
+
+   ```
+   pnpm dev
+   ```
+
+4. Open your browser and navigate to `http://localhost:3000` (or the port specified in your console).
+
+## Project Structure
+
+- `/src`: Contains the source code for the React application
+  - `/Components`: Reusable React components
+  - `/pages`: Individual page components
+  - `/hooks`: Custom React hooks
+  - `/assets`: Static assets like images and icons
+
+## Available Scripts
+
+- `npm run dev`: Starts the development server
+- `npm run build`: Builds the app for production
+- `npm run test`: Runs the test suite (if implemented)
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License.
