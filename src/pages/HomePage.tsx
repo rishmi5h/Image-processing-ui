@@ -52,49 +52,59 @@ const HomePage = () => {
   }, [uploadedImage]);
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-white">
+    <div className="flex min-h-screen flex-col bg-gradient-to-b from-neutral-900 to-neutral-800 text-white">
       <Navbar />
-      <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-900 p-4">
-        <div className="w-full max-w-md rounded-lg bg-neutral-800 p-8 shadow-xl">
-          <h2 className="mb-6 text-center text-2xl font-bold text-purple-500">
+      <main className="flex-1">
+        <div className="container mx-auto px-4 py-16">
+          <h1 className="mb-8 text-center text-4xl font-bold text-purple-500">
             Image Processing
-          </h2>
+          </h1>
+          <div className="mx-auto max-w-2xl rounded-lg bg-neutral-800 p-8 shadow-xl">
+            <label
+              className="mb-4 block text-center text-xl"
+              htmlFor="imageInput"
+            >
+              Upload an image:
+            </label>
+            <input
+              accept="image/*"
+              className="mb-6 w-full cursor-pointer rounded-md bg-purple-600 px-4 py-2 text-white transition duration-300 ease-in-out hover:bg-purple-700"
+              id="imageInput"
+              onChange={handleImageUploadLocal}
+              type="file"
+            />
 
-          <label className="mb-2 block text-center" htmlFor="imageInput">
-            Upload an image:
-          </label>
-          <input
-            accept="image/*"
-            className="mb-6 w-full cursor-pointer rounded-md bg-purple-600 px-4 py-2 text-white transition duration-300 ease-in-out hover:bg-purple-700"
-            id="imageInput"
-            onChange={handleImageUploadLocal}
-            type="file"
-          />
+            <div className="mt-4 flex justify-center" id="imagePreview"></div>
 
-          <div className="mt-4 flex justify-center" id="imagePreview"></div>
+            <button
+              className="mt-6 w-full rounded-md bg-purple-600 px-4 py-2 text-white transition duration-300 ease-in-out hover:bg-purple-700"
+              onClick={handleImageUpload}
+            >
+              Upload Image
+            </button>
 
-          <button
-            className="mt-6 w-full rounded-md bg-purple-600 px-4 py-2 text-white transition duration-300 ease-in-out hover:bg-purple-700"
-            onClick={handleImageUpload}
-          >
-            Upload Image
-          </button>
+            {uploadSuccess && (
+              <div className="mt-4 text-center text-green-500">
+                Image uploaded successfully!
+              </div>
+            )}
 
-          {uploadSuccess && (
-            <div className="mt-4 text-center text-green-500">
-              Image uploaded successfully!
-            </div>
-          )}
-
-          {uploadedImageUrl && (
-            <div className="mt-6">
-              <h3 className="mb-2 text-center text-xl font-bold">Edit Image</h3>
-              <img alt="Uploaded" className="w-full" src={uploadedImageUrl} />
-              {/* Add image editing controls here */}
-            </div>
-          )}
+            {uploadedImageUrl && (
+              <div className="mt-6">
+                <h3 className="mb-4 text-center text-2xl font-bold text-purple-500">
+                  Edit Image
+                </h3>
+                <img
+                  alt="Uploaded"
+                  className="w-full rounded-lg"
+                  src={uploadedImageUrl}
+                />
+                {/* Add image editing controls here */}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      </main>
       <Footer />
     </div>
   );
