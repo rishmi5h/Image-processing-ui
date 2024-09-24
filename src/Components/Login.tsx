@@ -40,7 +40,7 @@ const Login = () => {
               <div className="flex items-center rounded border border-neutral-600 bg-neutral-700">
                 <FaUser className="ml-3 text-purple-500" />
                 <input
-                  className="w-full rounded border-none bg-transparent px-3 py-2 focus:outline-none"
+                  className="w-full rounded border-none bg-transparent px-3 py-2 autofill:bg-neutral-700 autofill:text-white focus:outline-none"
                   id="username"
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="Enter Username"
@@ -60,7 +60,7 @@ const Login = () => {
               <div className="flex items-center rounded border border-neutral-600 bg-neutral-700">
                 <FaLock className="ml-3 text-purple-500" />
                 <input
-                  className="w-full rounded border-none bg-transparent px-3 py-2 focus:outline-none"
+                  className="w-full rounded border-none bg-transparent px-3 py-2 autofill:bg-neutral-700 autofill:text-white focus:outline-none"
                   id="password"
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter Password"
