@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { FaLock, FaUser } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth.tsx';
+import { useAuth } from '../hooks/useAuth';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -23,60 +24,73 @@ const Register = () => {
   };
 
   return (
-    <div className="mx-auto my-8 mt-10 w-8/12 rounded border border-gray-200 p-4 shadow-md dark:border-neutral-600 dark:bg-neutral-800 dark:shadow-none">
-      <h1 className="mb-4 text-4xl">Register</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="mb-2 block text-sm font-bold" htmlFor="username">
-            UserName
-          </label>
-          <input
-            className="w-full rounded border px-3 py-2 dark:border-neutral-600 dark:bg-neutral-700"
-            id="username"
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter Username"
-            required
-            type="username"
-            value={username}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="mb-2 block text-sm font-bold" htmlFor="password">
-            Password
-          </label>
-          <input
-            className="w-full rounded border px-3 py-2 dark:border-neutral-600 dark:bg-neutral-700"
-            id="password"
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter Password"
-            required
-            type="password"
-            value={password}
-          />
-        </div>
-        {successMessage ? (
-          <div className="text-center text-green-500">{successMessage}</div>
-        ) : (
-          <button
-            className="w-full rounded bg-purple-500 px-4 py-2 text-white hover:bg-purple-600 disabled:bg-purple-300"
-            disabled={isLoading}
-            type="submit"
-          >
-            {isLoading ? (
-              <div className="flex items-center justify-center">
-                <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                <span className="ml-2">Registering...</span>
+    <div className="flex min-h-screen flex-col bg-gradient-to-b from-neutral-900 to-neutral-800 text-white">
+      <div className="container mx-auto flex flex-1 items-center justify-center px-4 py-16">
+        <div className="w-full max-w-md rounded-lg bg-neutral-800 p-8 shadow-xl">
+          <h1 className="mb-6 text-center text-3xl font-bold text-purple-500">
+            Register
+          </h1>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label
+                className="mb-2 block text-sm font-bold"
+                htmlFor="username"
+              >
+                Username
+              </label>
+              <div className="flex items-center rounded border border-neutral-600 bg-neutral-700">
+                <FaUser className="ml-3 text-purple-500" />
+                <input
+                  className="w-full rounded border-none bg-transparent px-3 py-2 focus:outline-none"
+                  id="username"
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Enter Username"
+                  required
+                  type="text"
+                  value={username}
+                />
               </div>
-            ) : (
-              'Register'
-            )}
-          </button>
-        )}
-      </form>
-      <div className="mt-4 text-center">
-        <Link className="text-blue-500 hover:underline" to="/login">
-          Login
-        </Link>
+            </div>
+            <div className="mb-6">
+              <label
+                className="mb-2 block text-sm font-bold"
+                htmlFor="password"
+              >
+                Password
+              </label>
+              <div className="flex items-center rounded border border-neutral-600 bg-neutral-700">
+                <FaLock className="ml-3 text-purple-500" />
+                <input
+                  className="w-full rounded border-none bg-transparent px-3 py-2 focus:outline-none"
+                  id="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter Password"
+                  required
+                  type="password"
+                  value={password}
+                />
+              </div>
+            </div>
+            <button
+              className="w-full rounded bg-purple-600 px-4 py-2 font-bold text-white transition duration-300 hover:bg-purple-700 focus:outline-none"
+              disabled={isLoading}
+              type="submit"
+            >
+              {isLoading ? 'Registering...' : 'Register'}
+            </button>
+          </form>
+          {successMessage && (
+            <div className="mt-4 text-center text-green-500">
+              {successMessage}
+            </div>
+          )}
+          <div className="mt-4 text-center">
+            Already have an account?{' '}
+            <Link className="text-purple-500 hover:underline" to="/login">
+              Login
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
