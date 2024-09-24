@@ -1,3 +1,4 @@
+import Footer from '../Components/Footer.tsx';
 import Navbar from '../Components/Navbar.tsx';
 
 const TransformPage = () => {
@@ -7,6 +8,7 @@ const TransformPage = () => {
       <div className="container mx-auto px-4 py-8">
         <h1 className="mb-6 text-3xl font-bold">Transform Image</h1>
       </div>
+      <Footer />
     </div>
   );
 };
