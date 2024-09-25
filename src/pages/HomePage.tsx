@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useCallback, useState } from 'react';
+import { FaCloudUploadAlt, FaEdit } from 'react-icons/fa';
 import { baseUrl } from '../api/getUrl.tsx';
 import Footer from '../Components/Footer.tsx';
 import Navbar from '../Components/Navbar.tsx';
@@ -8,6 +9,7 @@ const HomePage = () => {
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleImageUploadLocal = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,8 +21,7 @@ const HomePage = () => {
         reader.onload = (e) => {
           const img = document.createElement('img');
           img.src = e.target?.result as string;
-          img.style.maxWidth = '100%';
-          img.style.height = 'auto';
+          img.className = 'max-w-full h-auto rounded-lg';
           const previewContainer = document.getElementById('imagePreview');
           if (previewContainer) {
             previewContainer.innerHTML = '';
@@ -35,6 +36,7 @@ const HomePage = () => {
 
   const handleImageUpload = useCallback(async () => {
     if (uploadedImage) {
+      setIsLoading(true);
       const formData = new FormData();
       formData.append('file', uploadedImage);
       try {
@@ -44,9 +46,11 @@ const HomePage = () => {
           },
         });
         setUploadSuccess(true);
-        setUploadedImageUrl(response.data.imageUrl); // Assuming the server returns the image URL
+        setUploadedImageUrl(response.data.imageUrl);
       } catch {
         setUploadSuccess(false);
+      } finally {
+        setIsLoading(false);
       }
     }
   }, [uploadedImage]);
@@ -61,26 +65,44 @@ const HomePage = () => {
           </h1>
           <div className="mx-auto max-w-2xl rounded-lg bg-neutral-800 p-8 shadow-xl">
             <label
-              className="mb-4 block text-center text-xl"
+              className="mb-4 block text-center text-xl font-semibold"
               htmlFor="imageInput"
             >
               Upload an image:
             </label>
-            <input
-              accept="image/*"
-              className="mb-6 w-full cursor-pointer rounded-md bg-purple-600 px-4 py-2 text-white transition duration-300 ease-in-out hover:bg-purple-700"
-              id="imageInput"
-              onChange={handleImageUploadLocal}
-              type="file"
-            />
+            <div className="flex w-full items-center justify-center">
+              <label
+                className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-purple-300 bg-neutral-700 transition duration-300 hover:bg-neutral-600"
+                htmlFor="imageInput"
+              >
+                <div className="flex flex-col items-center justify-center pb-6 pt-5">
+                  <FaCloudUploadAlt className="mb-3 h-10 w-10 text-purple-500" />
+                  <p className="mb-2 text-sm text-gray-400">
+                    <span className="font-semibold">Click to upload</span> or
+                    drag and drop
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    SVG, PNG, JPG or GIF (MAX. 800x400px)
+                  </p>
+                </div>
+                <input
+                  accept="image/*"
+                  className="hidden"
+                  id="imageInput"
+                  onChange={handleImageUploadLocal}
+                  type="file"
+                />
+              </label>
+            </div>
 
             <div className="mt-4 flex justify-center" id="imagePreview"></div>
 
             <button
-              className="mt-6 w-full rounded-md bg-purple-600 px-4 py-2 text-white transition duration-300 ease-in-out hover:bg-purple-700"
+              className="mt-6 w-full rounded-md bg-purple-600 px-4 py-2 font-bold text-white transition duration-300 ease-in-out hover:bg-purple-700 focus:outline-none disabled:bg-purple-400"
+              disabled={!uploadedImage || isLoading}
               onClick={handleImageUpload}
             >
-              Upload Image
+              {isLoading ? 'Uploading...' : 'Upload Image'}
             </button>
 
             {uploadSuccess && (
@@ -99,7 +121,9 @@ const HomePage = () => {
                   className="w-full rounded-lg"
                   src={uploadedImageUrl}
                 />
-                {/* Add image editing controls here */}
+                <button className="mt-4 w-full rounded-md bg-purple-600 px-4 py-2 font-bold text-white transition duration-300 ease-in-out hover:bg-purple-700 focus:outline-none">
+                  <FaEdit className="mr-2 inline-block" /> Edit Image
+                </button>
               </div>
             )}
           </div>
