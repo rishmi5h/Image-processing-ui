@@ -3,6 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { FaDownload, FaExchangeAlt, FaUpload } from 'react-icons/fa';
 import Footer from '../Components/Footer.tsx';
 import Navbar from '../Components/Navbar.tsx';
+import UploadImage from '../Components/UploadImage';
 
 const ConvertPage = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -70,44 +71,10 @@ const ConvertPage = () => {
           Convert Image
         </h1>
         <div className="mx-auto max-w-2xl rounded-lg bg-neutral-800 p-8 shadow-xl">
-          <div className="mb-6">
-            <label className="mb-2 block font-semibold" htmlFor="imageInput">
-              Select an image:
-            </label>
-            <div className="flex w-full items-center justify-center">
-              <label
-                className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-purple-300 bg-neutral-700 transition duration-300 hover:bg-neutral-600"
-                htmlFor="imageInput"
-              >
-                <div className="flex flex-col items-center justify-center pb-6 pt-5">
-                  <FaUpload className="mb-3 h-10 w-10 text-purple-400" />
-                  <p className="mb-2 text-sm text-purple-400">
-                    <span className="font-semibold">Click to upload</span> or
-                    drag and drop
-                  </p>
-                  <p className="text-xs text-purple-400">
-                    SVG, PNG, JPG or GIF (MAX. 800x400px)
-                  </p>
-                </div>
-                <input
-                  accept="image/*"
-                  className="hidden"
-                  id="imageInput"
-                  onChange={handleImageSelect}
-                  type="file"
-                />
-              </label>
-            </div>
-            {previewUrl && (
-              <div className="mt-4">
-                <img
-                  alt="Preview"
-                  className="h-auto max-w-full rounded-lg"
-                  src={previewUrl}
-                />
-              </div>
-            )}
-          </div>
+          <UploadImage
+            onImageSelect={handleImageSelect}
+            previewUrl={previewUrl}
+          />
           <div className="mb-6">
             <label className="mb-2 block font-semibold" htmlFor="formatSelect">
               Select output format:

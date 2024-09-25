@@ -4,6 +4,7 @@ import { FaCloudUploadAlt, FaEdit } from 'react-icons/fa';
 import { baseUrl } from '../api/getUrl.tsx';
 import Footer from '../Components/Footer.tsx';
 import Navbar from '../Components/Navbar.tsx';
+import UploadImage from '../Components/UploadImage';
 
 const HomePage = () => {
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
@@ -64,39 +65,10 @@ const HomePage = () => {
             Image Processing
           </h1>
           <div className="mx-auto max-w-2xl rounded-lg bg-neutral-800 p-8 shadow-xl">
-            <label
-              className="mb-4 block text-center text-xl font-semibold"
-              htmlFor="imageInput"
-            >
-              Upload an image:
-            </label>
-            <div className="flex w-full items-center justify-center">
-              <label
-                className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-purple-300 bg-neutral-700 transition duration-300 hover:bg-neutral-600"
-                htmlFor="imageInput"
-              >
-                <div className="flex flex-col items-center justify-center pb-6 pt-5">
-                  <FaCloudUploadAlt className="mb-3 h-10 w-10 text-purple-500" />
-                  <p className="mb-2 text-sm text-gray-400">
-                    <span className="font-semibold">Click to upload</span> or
-                    drag and drop
-                  </p>
-                  <p className="text-xs text-gray-400">
-                    SVG, PNG, JPG or GIF (MAX. 800x400px)
-                  </p>
-                </div>
-                <input
-                  accept="image/*"
-                  className="hidden"
-                  id="imageInput"
-                  onChange={handleImageUploadLocal}
-                  type="file"
-                />
-              </label>
-            </div>
-
-            <div className="mt-4 flex justify-center" id="imagePreview"></div>
-
+            <UploadImage
+              onImageSelect={handleImageUploadLocal}
+              previewUrl={uploadedImageUrl}
+            />
             <button
               className="mt-6 w-full rounded-md bg-purple-600 px-4 py-2 font-bold text-white transition duration-300 ease-in-out hover:bg-purple-700 focus:outline-none disabled:bg-purple-400"
               disabled={!uploadedImage || isLoading}
@@ -104,7 +76,6 @@ const HomePage = () => {
             >
               {isLoading ? 'Uploading...' : 'Upload Image'}
             </button>
-
             {uploadSuccess && (
               <div className="mt-4 text-center text-green-500">
                 Image uploaded successfully!
