@@ -1,9 +1,10 @@
 import axios from 'axios';
 import React, { useCallback, useState } from 'react';
-import { FaDownload, FaExchangeAlt, FaUpload } from 'react-icons/fa';
+import { FaDownload, FaExchangeAlt } from 'react-icons/fa';
+import { getUrl } from '../api/getUrl.tsx';
 import Footer from '../Components/Footer.tsx';
 import Navbar from '../Components/Navbar.tsx';
-import UploadImage from '../Components/UploadImage';
+import UploadImage from '../Components/UploadImage.tsx';
 
 const ConvertPage = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -44,12 +45,15 @@ const ConvertPage = () => {
 
     const formData = new FormData();
     formData.append('file', selectedImage);
-    formData.append('format', outputFormat);
 
     try {
-      const response = await axios.post('/api/convert', formData, {
+      const response = await axios.get(getUrl('/convert'), {
+        data: formData,
         headers: {
           'Content-Type': 'multipart/form-data',
+        },
+        params: {
+          format: outputFormat,
         },
         responseType: 'blob',
       });
