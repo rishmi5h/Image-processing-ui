@@ -16,16 +16,10 @@ const ConvertPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  const handleImageSelect = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (file) {
-        setSelectedImage(file);
-        setPreviewUrl(URL.createObjectURL(file));
-      }
-    },
-    [],
-  );
+  const handleImageSelect = useCallback((file: File) => {
+    setSelectedImage(file);
+    setPreviewUrl(URL.createObjectURL(file));
+  }, []);
 
   const handleFormatChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -76,7 +70,11 @@ const ConvertPage = () => {
         </h1>
         <div className="mx-auto max-w-2xl rounded-lg bg-neutral-800 p-8 shadow-xl">
           <UploadImage
-            onImageSelect={handleImageSelect}
+            maxSizeInBytes={10 * 1024 * 1024} // 10MB limit
+            onImageSelect={(file) => {
+              setSelectedImage(file);
+              setPreviewUrl(URL.createObjectURL(file));
+            }}
             previewUrl={previewUrl}
           />
           <div className="mb-6">

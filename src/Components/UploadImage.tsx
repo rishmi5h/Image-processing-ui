@@ -2,14 +2,27 @@ import React from 'react';
 import { FaCloudUploadAlt } from 'react-icons/fa';
 
 interface UploadImageProps {
-  onImageSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  maxSizeInBytes?: number;
+  onImageSelect: (file: File) => void;
   previewUrl?: string | null;
 }
 
 const UploadImage: React.FC<UploadImageProps> = ({
+  maxSizeInBytes = 10 * 1024 * 1024,
   onImageSelect,
-  previewUrl,
+  previewUrl, // 10MB default
 }) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > maxSizeInBytes) {
+        alert(`File size exceeds ${maxSizeInBytes / (1024 * 1024)}MB limit`);
+        return;
+      }
+      onImageSelect(file);
+    }
+  };
+
   return (
     <div className="mb-6">
       <label className="mb-2 block font-semibold" htmlFor="imageInput">
@@ -34,7 +47,7 @@ const UploadImage: React.FC<UploadImageProps> = ({
             accept="image/*"
             className="hidden"
             id="imageInput"
-            onChange={onImageSelect}
+            onChange={handleFileChange}
             type="file"
           />
         </label>
