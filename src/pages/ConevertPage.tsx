@@ -41,7 +41,7 @@ const ConvertPage = () => {
     formData.append('file', selectedImage);
 
     try {
-      const response = await axios.get(getUrl('/convert'), {
+      const response = await axios.post(getUrl('/convert'), {
         data: formData,
         headers: {
           'Content-Type': 'multipart/form-data',
