@@ -39,22 +39,20 @@ const ConvertPage = () => {
 
     const formData = new FormData();
     formData.append('file', selectedImage);
+    formData.append('format', outputFormat);
 
     try {
-      const response = await axios.post(getUrl('/convert'), {
-        data: formData,
+      const response = await axios.post(getUrl('/convert'), formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-        },
-        params: {
-          format: outputFormat,
         },
         responseType: 'blob',
       });
 
       const url = URL.createObjectURL(response.data);
       setConvertedImageUrl(url);
-    } catch {
+    } catch (error) {
+      console.error('Conversion error:', error);
       setError('An error occurred during conversion');
     } finally {
       setIsLoading(false);
