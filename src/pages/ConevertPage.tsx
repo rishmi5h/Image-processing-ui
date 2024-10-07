@@ -15,10 +15,16 @@ const ConvertPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [originalFormat, setOriginalFormat] = useState<string | null>(null);
 
   const handleImageSelect = useCallback((file: File) => {
     setSelectedImage(file);
     setPreviewUrl(URL.createObjectURL(file));
+    const format = file.name.split('.').pop()?.toLowerCase() || null;
+    setOriginalFormat(format);
+    if (format) {
+      setOutputFormat(format === 'jpeg' ? 'jpg' : format);
+    }
   }, []);
 
   const handleFormatChange = useCallback(
@@ -31,6 +37,18 @@ const ConvertPage = () => {
   const handleConvert = useCallback(async () => {
     if (!selectedImage) {
       setError('Please select an image to convert');
+      return;
+    }
+
+    const lowerCaseOriginalFormat = originalFormat?.toLowerCase();
+    const lowerCaseOutputFormat = outputFormat.toLowerCase();
+
+    if (
+      lowerCaseOriginalFormat === lowerCaseOutputFormat ||
+      (lowerCaseOriginalFormat === 'jpeg' && lowerCaseOutputFormat === 'jpg') ||
+      (lowerCaseOriginalFormat === 'jpg' && lowerCaseOutputFormat === 'jpeg')
+    ) {
+      setError('Cannot convert to the same format as the original image');
       return;
     }
 
@@ -57,7 +75,7 @@ const ConvertPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [selectedImage, outputFormat]);
+  }, [selectedImage, outputFormat, originalFormat]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-neutral-900 to-neutral-800 text-white">
@@ -85,10 +103,21 @@ const ConvertPage = () => {
               onChange={handleFormatChange}
               value={outputFormat}
             >
-              <option value="jpg">JPG</option>
-              <option value="png">PNG</option>
-              <option value="webp">WebP</option>
-              <option value="gif">GIF</option>
+              <option
+                disabled={originalFormat === 'jpg' || originalFormat === 'jpeg'}
+                value="jpg"
+              >
+                JPG
+              </option>
+              <option disabled={originalFormat === 'png'} value="png">
+                PNG
+              </option>
+              <option disabled={originalFormat === 'webp'} value="webp">
+                WebP
+              </option>
+              <option disabled={originalFormat === 'gif'} value="gif">
+                GIF
+              </option>
             </select>
           </div>
           <button
