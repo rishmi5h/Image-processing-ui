@@ -20,11 +20,9 @@ const ConvertPage = () => {
   const handleImageSelect = useCallback((file: File) => {
     setSelectedImage(file);
     setPreviewUrl(URL.createObjectURL(file));
-    const format = file.name.split('.').pop()?.toLowerCase() || null;
-    setOriginalFormat(format);
-    if (format) {
-      setOutputFormat(format === 'jpeg' ? 'jpg' : format);
-    }
+    const format = file.type.split('/')[1].toLowerCase();
+    setOriginalFormat(format === 'jpeg' ? 'jpg' : format);
+    setOutputFormat(format === 'jpeg' ? 'jpg' : format);
   }, []);
 
   const handleFormatChange = useCallback(
