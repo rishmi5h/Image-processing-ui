@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { useCallback, useState } from 'react';
-import { FaCrop, FaExpand, FaRedo, FaUndo } from 'react-icons/fa';
 import { getUrl } from '../api/getUrl.tsx';
 import Footer from '../Components/Footer.tsx';
 import Navbar from '../Components/Navbar.tsx';
@@ -77,24 +76,26 @@ const TransformPage = () => {
                 <div className="mb-4 flex items-center">
                   <label className="mr-2 w-24">Rotation:</label>
                   <input
-                    type="range"
-                    min="-180"
-                    max="180"
-                    value={rotation}
-                    onChange={(e) => setRotation(parseInt(e.target.value))}
                     className="w-full"
+                    max="180"
+                    min="-180"
+                    onChange={(e) =>
+                      setRotation(Number.parseInt(e.target.value))
+                    }
+                    type="range"
+                    value={rotation}
                   />
                   <span className="ml-2 w-12 text-right">{rotation}°</span>
                 </div>
                 <div className="mb-4 flex items-center">
                   <label className="mr-2 w-24">Scale:</label>
                   <input
-                    type="range"
-                    min="50"
-                    max="200"
-                    value={scale}
-                    onChange={(e) => setScale(parseInt(e.target.value))}
                     className="w-full"
+                    max="200"
+                    min="50"
+                    onChange={(e) => setScale(Number.parseInt(e.target.value))}
+                    type="range"
+                    value={scale}
                   />
                   <span className="ml-2 w-12 text-right">{scale}%</span>
                 </div>
@@ -114,14 +115,14 @@ const TransformPage = () => {
                   Transformed Image
                 </h2>
                 <img
-                  src={transformedImageUrl}
                   alt="Transformed"
                   className="h-auto max-w-full rounded-lg"
+                  src={transformedImageUrl}
                 />
                 <a
-                  href={transformedImageUrl}
-                  download="transformed_image.jpg"
                   className="mt-4 inline-block rounded bg-green-600 px-4 py-2 text-white transition duration-300 hover:bg-green-700"
+                  download="transformed_image.jpg"
+                  href={transformedImageUrl}
                 >
                   Download Transformed Image
                 </a>
