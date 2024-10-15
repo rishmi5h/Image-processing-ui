@@ -25,7 +25,7 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
     return <div>Loading...</div>;
   }
 
-  return isAuthenticated ? <Navigate to="/Home" /> : children;
+  return isAuthenticated ? <Navigate to="/transform" /> : children;
 };
 
 const AppRoutes = () => (
