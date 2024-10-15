@@ -75,79 +75,137 @@ const TransformPage = () => {
               previewUrl={previewUrl}
             />
             {previewUrl && (
-              <div className="mt-6">
-                <h2 className="mb-4 text-2xl font-bold text-purple-500">
+              <div className="mt-6 rounded-lg bg-neutral-700 p-6 shadow-lg">
+                <h2 className="mb-6 border-b border-purple-400 pb-2 text-2xl font-bold text-purple-400">
                   Transformation Controls
                 </h2>
-                <div className="mb-4 flex items-center">
-                  <label className="mr-2 w-24">Rotation:</label>
-                  <input
-                    className="w-full"
-                    max="180"
-                    min="-180"
-                    onChange={(e) =>
-                      setRotation(Number.parseInt(e.target.value))
-                    }
-                    type="range"
-                    value={rotation}
-                  />
-                  <span className="ml-2 w-12 text-right">{rotation}°</span>
-                </div>
-                <div className="mb-4 flex items-center">
-                  <label className="mr-2 w-24">Scale:</label>
-                  <input
-                    className="w-full"
-                    max="200"
-                    min="50"
-                    onChange={(e) => setScale(Number.parseInt(e.target.value))}
-                    type="range"
-                    value={scale}
-                  />
-                  <span className="ml-2 w-12 text-right">{scale}%</span>
-                </div>
-                <div className="mb-4 flex items-center">
-                  <label className="mr-2 w-24">Width:</label>
-                  <input
-                    className="w-full rounded bg-neutral-700 px-2 py-1"
-                    min="1"
-                    onChange={(e) => setWidth(Number(e.target.value))}
-                    type="number"
-                    value={width}
-                  />
-                  <span className="ml-2 w-12 text-right">px</span>
-                </div>
-                <div className="mb-4 flex items-center">
-                  <label className="mr-2 w-24">Height:</label>
-                  <input
-                    className="w-full rounded bg-neutral-700 px-2 py-1"
-                    min="1"
-                    onChange={(e) => setHeight(Number(e.target.value))}
-                    type="number"
-                    value={height}
-                  />
-                  <span className="ml-2 w-12 text-right">px</span>
-                </div>
-                <div className="mb-4 flex items-center">
-                  <label className="mr-2 w-24">Filter:</label>
-                  <select
-                    className="w-full rounded bg-neutral-700 px-2 py-1"
-                    onChange={(e) => setFilter(e.target.value)}
-                    value={filter}
+                <div className="space-y-6">
+                  <div className="flex flex-col">
+                    <label className="mb-2 text-sm font-medium text-purple-300">
+                      Rotation
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        className="w-full accent-purple-500"
+                        max="180"
+                        min="-180"
+                        onChange={(e) =>
+                          setRotation(Number.parseInt(e.target.value))
+                        }
+                        type="range"
+                        value={rotation}
+                      />
+                      <span className="ml-4 w-12 text-right text-purple-300">
+                        {rotation}°
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label className="mb-2 text-sm font-medium text-purple-300">
+                      Scale
+                    </label>
+                    <div className="flex items-center">
+                      <input
+                        className="w-full accent-purple-500"
+                        max="200"
+                        min="50"
+                        onChange={(e) =>
+                          setScale(Number.parseInt(e.target.value))
+                        }
+                        type="range"
+                        value={scale}
+                      />
+                      <span className="ml-4 w-12 text-right text-purple-300">
+                        {scale}%
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex space-x-4">
+                    <div className="flex-1">
+                      <label className="mb-2 block text-sm font-medium text-purple-300">
+                        Width
+                      </label>
+                      <div className="flex items-center">
+                        <input
+                          className="w-full rounded bg-neutral-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          min="1"
+                          onChange={(e) => setWidth(Number(e.target.value))}
+                          type="number"
+                          value={width}
+                        />
+                        <span className="ml-2 text-purple-300">px</span>
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <label className="mb-2 block text-sm font-medium text-purple-300">
+                        Height
+                      </label>
+                      <div className="flex items-center">
+                        <input
+                          className="w-full rounded bg-neutral-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          min="1"
+                          onChange={(e) => setHeight(Number(e.target.value))}
+                          type="number"
+                          value={height}
+                        />
+                        <span className="ml-2 text-purple-300">px</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-purple-300">
+                      Filter
+                    </label>
+                    <select
+                      className="w-full rounded bg-neutral-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      onChange={(e) => setFilter(e.target.value)}
+                      value={filter}
+                    >
+                      <option value="none">None</option>
+                      <option value="grayscale">Grayscale</option>
+                      <option value="sepia">Sepia</option>
+                      <option value="blur">Blur</option>
+                      <option value="sharpen">Sharpen</option>
+                    </select>
+                  </div>
+
+                  <button
+                    className="mt-6 w-full transform rounded-lg bg-purple-600 px-4 py-3 font-bold text-white transition duration-300 ease-in-out hover:scale-105 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50"
+                    disabled={isLoading}
+                    onClick={handleTransform}
                   >
-                    <option value="none">None</option>
-                    <option value="grayscale">Grayscale</option>
-                    <option value="sepia">Sepia</option>
-                    <option value="blur">Blur</option>
-                    <option value="sharpen">Sharpen</option>
-                  </select>
+                    {isLoading ? (
+                      <span className="flex items-center justify-center">
+                        <svg
+                          className="-ml-1 mr-3 h-5 w-5 animate-spin text-white"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            fill="currentColor"
+                          ></path>
+                        </svg>
+                        Transforming...
+                      </span>
+                    ) : (
+                      'Apply Transformation'
+                    )}
+                  </button>
                 </div>
-                <button
-                  className="mt-4 flex w-full items-center justify-center rounded bg-purple-600 px-4 py-2 text-white transition duration-300 hover:bg-purple-700 disabled:cursor-not-allowed disabled:bg-purple-400"
-                  disabled={isLoading}
-                  onClick={handleTransform}
-                >
-                  {isLoading ? 'Transforming...' : 'Apply Transformation'}
-                </button>
               </div>
             )}
             {error && <p className="mt-4 text-red-500">{error}</p>}
