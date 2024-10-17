@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useCallback, useState } from 'react';
+import ReactCrop, { Crop } from 'react-image-crop';
 import { getUrl } from '../api/getUrl.tsx';
 import Footer from '../Components/Footer.tsx';
 import Navbar from '../Components/Navbar.tsx';
@@ -18,12 +19,39 @@ const TransformPage = () => {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const [filter, setFilter] = useState('none');
+  const [crop, setCrop] = useState<Crop>({
+    unit: '%',
+    width: 30,
+    aspect: 16 / 9,
+  });
+  const [completedCrop, setCompletedCrop] = useState<Crop | null>(null);
+  const [isCropping, setIsCropping] = useState(false);
 
   const handleImageSelect = useCallback((file: File) => {
     setSelectedImage(file);
     setPreviewUrl(URL.createObjectURL(file));
     setTransformedImageUrl(null);
+    setIsCropping(true);
   }, []);
+
+  const handleCropComplete = useCallback((crop: Crop) => {
+    setCompletedCrop(crop);
+  }, []);
+
+  const handleCropCancel = useCallback(() => {
+    setIsCropping(false);
+    setCrop({ unit: '%', width: 30, aspect: 16 / 9 });
+    setCompletedCrop(null);
+  }, []);
+
+  const handleCropConfirm = useCallback(() => {
+    if (completedCrop && previewUrl) {
+      // Here you would typically send the crop data to your backend
+      // For this example, we'll just update the previewUrl
+      setIsCropping(false);
+      // You may want to actually crop the image here or send crop data to backend
+    }
+  }, [completedCrop, previewUrl]);
 
   const handleTransform = useCallback(async () => {
     if (!selectedImage) {
@@ -41,6 +69,7 @@ const TransformPage = () => {
     formData.append('width', width.toString());
     formData.append('height', height.toString());
     formData.append('filter', filter);
+    formData.append('crop', JSON.stringify(completedCrop));
 
     try {
       const response = await axios.post(getUrl('/transform'), formData, {
@@ -58,7 +87,7 @@ const TransformPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [selectedImage, rotation, scale, width, height, filter]);
+  }, [selectedImage, rotation, scale, width, height, filter, completedCrop]);
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-neutral-900 to-neutral-800 text-white">
@@ -70,11 +99,40 @@ const TransformPage = () => {
           </h1>
           <div className="mx-auto max-w-2xl rounded-lg bg-neutral-800 p-8 shadow-xl">
             <UploadImage
-              maxSizeInBytes={10 * 1024 * 1024} // 10MB limit
+              maxSizeInBytes={10 * 1024 * 1024}
               onImageSelect={handleImageSelect}
               previewUrl={previewUrl}
             />
-            {previewUrl && (
+            {previewUrl && isCropping && (
+              <div className="mt-6 rounded-lg bg-neutral-700 p-6 shadow-lg">
+                <h2 className="mb-4 text-2xl font-bold text-purple-400">
+                  Crop Image
+                </h2>
+                <ReactCrop
+                  crop={crop}
+                  onChange={(c) => setCrop(c)}
+                  onComplete={handleCropComplete}
+                  aspect={16 / 9}
+                >
+                  <img src={previewUrl} alt="Preview" />
+                </ReactCrop>
+                <div className="mt-4 flex justify-end space-x-4">
+                  <button
+                    onClick={handleCropCancel}
+                    className="rounded bg-gray-600 px-4 py-2 text-white hover:bg-gray-700"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleCropConfirm}
+                    className="rounded bg-purple-600 px-4 py-2 text-white hover:bg-purple-700"
+                  >
+                    Confirm Crop
+                  </button>
+                </div>
+              </div>
+            )}
+            {previewUrl && !isCropping && (
               <div className="mt-6 rounded-lg bg-neutral-700 p-6 shadow-lg">
                 <h2 className="mb-6 border-b border-purple-400 pb-2 text-2xl font-bold text-purple-400">
                   Transformation Controls
@@ -171,6 +229,13 @@ const TransformPage = () => {
                       <option value="sharpen">Sharpen</option>
                     </select>
                   </div>
+
+                  <button
+                    className="mt-4 w-full rounded bg-purple-600 px-4 py-2 font-bold text-white hover:bg-purple-700"
+                    onClick={() => setIsCropping(true)}
+                  >
+                    Crop Image
+                  </button>
 
                   <button
                     className="mt-6 w-full transform rounded-lg bg-purple-600 px-4 py-3 font-bold text-white transition duration-300 ease-in-out hover:scale-105 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50"
