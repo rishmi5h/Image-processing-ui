@@ -37,16 +37,24 @@ const TransformPage = () => {
     filters: { grayscale: false, sepia: false },
     format: 'png',
   });
+  const [currentImageFormat, setCurrentImageFormat] = useState<string | null>(
+    null,
+  );
 
   const handleImageSelect = useCallback((file: File) => {
     setSelectedImage(file);
     setPreviewUrl(URL.createObjectURL(file));
     setTransformedImageUrl(null);
     setIsCropping(true);
+
+    // Determine the image format from the file type
+    const format = file.type.split('/')[1];
+    setCurrentImageFormat(format);
+    setTransformations((prev: any) => ({ ...prev, format: format }));
   }, []);
 
   const handleCropComplete = useCallback((crop: Crop) => {
-    setTransformations((prev) => ({ ...prev, crop }));
+    setTransformations((prev: any) => ({ ...prev, crop }));
   }, []);
 
   const handleCropCancel = useCallback(() => {
@@ -88,6 +96,11 @@ const TransformPage = () => {
     }
   }, [selectedImage, transformations]);
 
+  const getAvailableFormats = useCallback(() => {
+    const allFormats = ['png', 'jpeg', 'webp'];
+    return allFormats.filter((format) => format !== currentImageFormat);
+  }, [currentImageFormat]);
+
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-neutral-900 to-neutral-800 text-white">
       <Navbar />
@@ -109,8 +122,8 @@ const TransformPage = () => {
                 </h2>
                 <ReactCrop
                   crop={transformations.crop}
-                  onChange={(c) =>
-                    setTransformations((prev) => ({ ...prev, crop: c }))
+                  onChange={(c: any) =>
+                    setTransformations((prev: any) => ({ ...prev, crop: c }))
                   }
                   onComplete={handleCropComplete}
                 >
@@ -146,8 +159,8 @@ const TransformPage = () => {
                       <input
                         type="number"
                         value={transformations.resize.width}
-                        onChange={(e) =>
-                          setTransformations((prev) => ({
+                        onChange={(e: { target: { value: any } }) =>
+                          setTransformations((prev: { resize: any }) => ({
                             ...prev,
                             resize: {
                               ...prev.resize,
@@ -165,8 +178,8 @@ const TransformPage = () => {
                       <input
                         type="number"
                         value={transformations.resize.height}
-                        onChange={(e) =>
-                          setTransformations((prev) => ({
+                        onChange={(e: { target: { value: any } }) =>
+                          setTransformations((prev: { resize: any }) => ({
                             ...prev,
                             resize: {
                               ...prev.resize,
@@ -187,8 +200,8 @@ const TransformPage = () => {
                       min="-180"
                       max="180"
                       value={transformations.rotate}
-                      onChange={(e) =>
-                        setTransformations((prev) => ({
+                      onChange={(e: { target: { value: any } }) =>
+                        setTransformations((prev: any) => ({
                           ...prev,
                           rotate: Number(e.target.value),
                         }))
@@ -208,8 +221,8 @@ const TransformPage = () => {
                         <input
                           type="checkbox"
                           checked={transformations.filters.grayscale}
-                          onChange={(e) =>
-                            setTransformations((prev) => ({
+                          onChange={(e: { target: { checked: any } }) =>
+                            setTransformations((prev: { filters: any }) => ({
                               ...prev,
                               filters: {
                                 ...prev.filters,
@@ -225,8 +238,8 @@ const TransformPage = () => {
                         <input
                           type="checkbox"
                           checked={transformations.filters.sepia}
-                          onChange={(e) =>
-                            setTransformations((prev) => ({
+                          onChange={(e: { target: { checked: any } }) =>
+                            setTransformations((prev: { filters: any }) => ({
                               ...prev,
                               filters: {
                                 ...prev.filters,
@@ -246,17 +259,22 @@ const TransformPage = () => {
                     </label>
                     <select
                       value={transformations.format}
-                      onChange={(e) =>
-                        setTransformations((prev) => ({
+                      onChange={(e: { target: { value: any } }) =>
+                        setTransformations((prev: any) => ({
                           ...prev,
                           format: e.target.value,
                         }))
                       }
                       className="w-full rounded bg-neutral-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                     >
-                      <option value="png">PNG</option>
-                      <option value="jpeg">JPEG</option>
-                      <option value="webp">WebP</option>
+                      <option value={currentImageFormat}>
+                        {currentImageFormat?.toUpperCase()} (Current)
+                      </option>
+                      {getAvailableFormats().map((format: string) => (
+                        <option key={format} value={format}>
+                          {format.toUpperCase()}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <button
