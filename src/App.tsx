@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from './hooks/useAuth.tsx';
 import ConvertPage from './pages/ConevertPage.tsx';
 import HomePage from './pages/HomePage.tsx';
 import LandingPage from './pages/LandingPage.tsx';
+import ProfilePage from './pages/ProfilePage.tsx';
 import TransformPage from './pages/TransformPage.tsx';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -77,6 +78,14 @@ const AppRoutes = () => (
         </PublicRoute>
       }
       path="/"
+    />
+    <Route
+      element={
+        <ProtectedRoute>
+          <ProfilePage />
+        </ProtectedRoute>
+      }
+      path="/profile"
     />
   </Routes>
 );
