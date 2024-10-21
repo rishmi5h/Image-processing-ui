@@ -9,7 +9,12 @@ interface AuthContextType {
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
   register: (username: string, password: string) => Promise<void>;
+  updatePassword: (
+    currentPassword: string,
+    newPassword: string,
+  ) => Promise<void>;
   token: string | null;
+  user: { username: string } | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -18,6 +23,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<{ username: string } | null>(null);
   const navigate = useNavigate();
 
   const checkAuthStatus = async () => {
@@ -26,6 +32,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setToken(storedToken);
       setIsAuthenticated(true);
       axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+      try {
+        const response = await axios.get(baseUrl + '/user');
+        setUser({ username: response.data.username });
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        logout();
+      }
     } else {
       logout();
     }
@@ -91,9 +104,44 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     navigate('/');
   };
 
+  const updatePassword = async (
+    currentPassword: string,
+    newPassword: string,
+  ) => {
+    try {
+      const response = await axios.put(
+        baseUrl + '/update-password',
+        { currentPassword, newPassword },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      if (response.status === 200) {
+        // Password updated successfully
+        return;
+      } else {
+        throw new Error('Failed to update password');
+      }
+    } catch (error) {
+      console.error('Error updating password:', error);
+      throw new Error('Failed to update password');
+    }
+  };
+
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, loading, login, logout, register, token }}
+      value={{
+        isAuthenticated,
+        loading,
+        login,
+        logout,
+        register,
+        updatePassword,
+        token,
+        user,
+      }}
     >
       {children}
     </AuthContext.Provider>
