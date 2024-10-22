@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FaLock } from 'react-icons/fa';
 import Footer from '../Components/Footer.tsx';
 import Navbar from '../Components/Navbar.tsx';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../hooks/useAuth.tsx';
 
 const ProfilePage = () => {
   const [currentPassword, setCurrentPassword] = useState('');
