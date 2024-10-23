@@ -9,11 +9,11 @@ interface AuthContextType {
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
   register: (username: string, password: string) => Promise<void>;
+  token: string | null;
   updatePassword: (
     currentPassword: string,
     newPassword: string,
   ) => Promise<void>;
-  token: string | null;
   user: { username: string } | null;
 }
 
@@ -26,19 +26,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<{ username: string } | null>(null);
   const navigate = useNavigate();
 
-  const checkAuthStatus = async () => {
+  const checkAuthStatus = () => {
     const storedToken = localStorage.getItem('token');
-    if (storedToken) {
+    const storedUsername = localStorage.getItem('username');
+    if (storedToken && storedUsername) {
       setToken(storedToken);
+      setUser({ username: storedUsername });
       setIsAuthenticated(true);
       axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
-      try {
-        const response = await axios.get(baseUrl + '/user');
-        setUser({ username: response.data.username });
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-        logout();
-      }
     } else {
       logout();
     }
@@ -62,7 +57,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const token = response.data;
       if (token) {
         localStorage.setItem('token', token);
+        localStorage.setItem('username', username);
         setToken(token);
+        setUser({ username });
         setIsAuthenticated(true);
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         navigate('/');
@@ -72,6 +69,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch {
       throw new Error('Login failed');
     }
+  };
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    setToken(null);
+    setUser(null);
+    setIsAuthenticated(false);
+    delete axios.defaults.headers.common['Authorization'];
+    navigate('/');
   };
 
   const register = async (username: string, password: string) => {
@@ -94,14 +101,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch {
       throw new Error('Registration failed');
     }
-  };
-
-  const logout = () => {
-    localStorage.removeItem('token');
-    setToken(null);
-    setIsAuthenticated(false);
-    delete axios.defaults.headers.common['Authorization'];
-    navigate('/');
   };
 
   const updatePassword = async (
@@ -138,8 +137,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         login,
         logout,
         register,
-        updatePassword,
         token,
+        updatePassword,
         user,
       }}
     >
