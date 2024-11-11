@@ -8,17 +8,17 @@ import Navbar from '../Components/Navbar.tsx';
 import UploadImage from '../Components/UploadImage.tsx';
 
 interface Transformations {
-  resize: {
-    width: number;
-    height: number;
-  };
   crop: Crop;
-  rotate: number;
   filters: {
     grayscale: boolean;
     sepia: boolean;
   };
   format: string;
+  resize: {
+    height: number;
+    width: number;
+  };
+  rotate: number;
 }
 
 const TransformPage = () => {
@@ -31,11 +31,11 @@ const TransformPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [isCropping, setIsCropping] = useState(false);
   const [transformations, setTransformations] = useState<Transformations>({
-    resize: { width: 800, height: 600 },
-    crop: { unit: '%', width: 30, height: 30, x: 35, y: 35 },
-    rotate: 0,
+    crop: { height: 30, unit: '%', width: 30, x: 35, y: 35 },
     filters: { grayscale: false, sepia: false },
     format: 'png',
+    resize: { height: 600, width: 800 },
+    rotate: 0,
   });
   const [currentImageFormat, setCurrentImageFormat] = useState<string | null>(
     null,
@@ -50,7 +50,7 @@ const TransformPage = () => {
     // Determine the image format from the file type
     const format = file.type.split('/')[1];
     setCurrentImageFormat(format);
-    setTransformations((prev: any) => ({ ...prev, format: format }));
+    setTransformations((prev: any) => ({ ...prev, format }));
   }, []);
 
   const handleCropComplete = useCallback((crop: Crop) => {
@@ -122,23 +122,26 @@ const TransformPage = () => {
                 </h2>
                 <ReactCrop
                   crop={transformations.crop}
-                  onChange={(c: any) =>
-                    setTransformations((prev: any) => ({ ...prev, crop: c }))
+                  onChange={(c: Crop) =>
+                    setTransformations((prev: Transformations) => ({
+                      ...prev,
+                      crop: c,
+                    }))
                   }
                   onComplete={handleCropComplete}
                 >
-                  <img src={previewUrl} alt="Preview" />
+                  <img alt="Preview" src={previewUrl} />
                 </ReactCrop>
                 <div className="mt-4 flex justify-end space-x-4">
                   <button
-                    onClick={handleCropCancel}
                     className="rounded bg-gray-600 px-4 py-2 text-white hover:bg-gray-700"
+                    onClick={handleCropCancel}
                   >
                     Cancel
                   </button>
                   <button
-                    onClick={handleCropConfirm}
                     className="rounded bg-purple-600 px-4 py-2 text-white hover:bg-purple-700"
+                    onClick={handleCropConfirm}
                   >
                     Confirm Crop
                   </button>
@@ -157,8 +160,7 @@ const TransformPage = () => {
                         Width
                       </label>
                       <input
-                        type="number"
-                        value={transformations.resize.width}
+                        className="w-full rounded bg-neutral-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                         onChange={(e: { target: { value: any } }) =>
                           setTransformations((prev: { resize: any }) => ({
                             ...prev,
@@ -168,7 +170,8 @@ const TransformPage = () => {
                             },
                           }))
                         }
-                        className="w-full rounded bg-neutral-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        type="number"
+                        value={transformations.resize.width}
                       />
                     </div>
                     <div className="flex-1">
@@ -176,8 +179,7 @@ const TransformPage = () => {
                         Height
                       </label>
                       <input
-                        type="number"
-                        value={transformations.resize.height}
+                        className="w-full rounded bg-neutral-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                         onChange={(e: { target: { value: any } }) =>
                           setTransformations((prev: { resize: any }) => ({
                             ...prev,
@@ -187,7 +189,8 @@ const TransformPage = () => {
                             },
                           }))
                         }
-                        className="w-full rounded bg-neutral-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        type="number"
+                        value={transformations.resize.height}
                       />
                     </div>
                   </div>
@@ -196,17 +199,17 @@ const TransformPage = () => {
                       Rotation
                     </label>
                     <input
-                      type="range"
-                      min="-180"
+                      className="w-full accent-purple-500"
                       max="180"
-                      value={transformations.rotate}
+                      min="-180"
                       onChange={(e: { target: { value: any } }) =>
                         setTransformations((prev: any) => ({
                           ...prev,
                           rotate: Number(e.target.value),
                         }))
                       }
-                      className="w-full accent-purple-500"
+                      type="range"
+                      value={transformations.rotate}
                     />
                     <span className="mt-1 block text-right text-sm text-purple-300">
                       {transformations.rotate}°
@@ -219,8 +222,8 @@ const TransformPage = () => {
                     <div className="flex space-x-4">
                       <label className="flex items-center">
                         <input
-                          type="checkbox"
                           checked={transformations.filters.grayscale}
+                          className="mr-2 accent-purple-500"
                           onChange={(e: { target: { checked: any } }) =>
                             setTransformations((prev: { filters: any }) => ({
                               ...prev,
@@ -230,14 +233,14 @@ const TransformPage = () => {
                               },
                             }))
                           }
-                          className="mr-2 accent-purple-500"
+                          type="checkbox"
                         />
                         Grayscale
                       </label>
                       <label className="flex items-center">
                         <input
-                          type="checkbox"
                           checked={transformations.filters.sepia}
+                          className="mr-2 accent-purple-500"
                           onChange={(e: { target: { checked: any } }) =>
                             setTransformations((prev: { filters: any }) => ({
                               ...prev,
@@ -247,7 +250,7 @@ const TransformPage = () => {
                               },
                             }))
                           }
-                          className="mr-2 accent-purple-500"
+                          type="checkbox"
                         />
                         Sepia
                       </label>
@@ -258,14 +261,14 @@ const TransformPage = () => {
                       Format
                     </label>
                     <select
-                      value={transformations.format}
+                      className="w-full rounded bg-neutral-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                       onChange={(e: { target: { value: any } }) =>
                         setTransformations((prev: any) => ({
                           ...prev,
                           format: e.target.value,
                         }))
                       }
-                      className="w-full rounded bg-neutral-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      value={transformations.format}
                     >
                       <option value={currentImageFormat}>
                         {currentImageFormat?.toUpperCase()} (Current)
@@ -300,14 +303,14 @@ const TransformPage = () => {
                   Transformed Image
                 </h2>
                 <img
-                  src={transformedImageUrl}
                   alt="Transformed"
                   className="max-w-full rounded-lg"
+                  src={transformedImageUrl}
                 />
                 <a
-                  href={transformedImageUrl}
-                  download={`transformed_image.${transformations.format}`}
                   className="mt-4 inline-block rounded bg-green-600 px-4 py-2 text-white transition duration-300 hover:bg-green-700"
+                  download={`transformed_image.${transformations.format}`}
+                  href={transformedImageUrl}
                 >
                   Download Transformed Image
                 </a>
