@@ -21,6 +21,18 @@ interface Transformations {
   rotate: number;
 }
 
+interface EventWithNumberValue {
+  target: {
+    value: string;
+  };
+}
+
+interface EventWithBooleanValue {
+  target: {
+    checked: boolean;
+  };
+}
+
 const TransformPage = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -41,21 +53,49 @@ const TransformPage = () => {
     null,
   );
 
-  const handleImageSelect = useCallback((file: File) => {
-    setSelectedImage(file);
-    setPreviewUrl(URL.createObjectURL(file));
-    setTransformedImageUrl(null);
-    setIsCropping(true);
+  const logTransformation = useCallback(
+    (type: string, oldValue: any, newValue: any) => {
+      // Log transformation changes for debugging
+      const logData = {
+        from: oldValue,
+        timestamp: new Date().toISOString(),
+        to: newValue,
+      };
+      // Using a more appropriate logging method
+      if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
+        console.log(`Transformation Update - ${type}:`, logData);
+      }
+    },
+    [],
+  );
 
-    // Determine the image format from the file type
-    const format = file.type.split('/')[1];
-    setCurrentImageFormat(format);
-    setTransformations((prev: any) => ({ ...prev, format }));
-  }, []);
+  const handleImageSelect = useCallback(
+    (file: File) => {
+      setSelectedImage(file);
+      setPreviewUrl(URL.createObjectURL(file));
+      setTransformedImageUrl(null);
+      setIsCropping(true);
 
-  const handleCropComplete = useCallback((crop: Crop) => {
-    setTransformations((prev: any) => ({ ...prev, crop }));
-  }, []);
+      // Determine the image format from the file type
+      const format = file.type.split('/')[1];
+      logTransformation('format', currentImageFormat, format);
+      setCurrentImageFormat(format);
+      setTransformations((prev: Transformations) => {
+        logTransformation('initial-format', prev.format, format);
+        return { ...prev, format };
+      });
+    },
+    [logTransformation, currentImageFormat],
+  );
+
+  const handleCropComplete = useCallback(
+    (crop: Crop) => {
+      logTransformation('crop', transformations.crop, crop);
+      setTransformations((prev: Transformations) => ({ ...prev, crop }));
+    },
+    [transformations.crop, logTransformation],
+  );
 
   const handleCropCancel = useCallback(() => {
     setIsCropping(false);
@@ -160,16 +200,19 @@ const TransformPage = () => {
                         Width
                       </label>
                       <input
-                        className="w-full rounded bg-neutral-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        onChange={(e: { target: { value: any } }) =>
-                          setTransformations((prev: { resize: any }) => ({
+                        className="w-full rounded bg-neutral-600 px-3 py-2"
+                        onChange={(e: EventWithNumberValue) => {
+                          const newWidth = Number(e.target.value);
+                          logTransformation(
+                            'resize-width',
+                            transformations.resize.width,
+                            newWidth,
+                          );
+                          setTransformations((prev: Transformations) => ({
                             ...prev,
-                            resize: {
-                              ...prev.resize,
-                              width: Number(e.target.value),
-                            },
-                          }))
-                        }
+                            resize: { ...prev.resize, width: newWidth },
+                          }));
+                        }}
                         type="number"
                         value={transformations.resize.width}
                       />
@@ -179,16 +222,19 @@ const TransformPage = () => {
                         Height
                       </label>
                       <input
-                        className="w-full rounded bg-neutral-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        onChange={(e: { target: { value: any } }) =>
-                          setTransformations((prev: { resize: any }) => ({
+                        className="w-full rounded bg-neutral-600 px-3 py-2"
+                        onChange={(e: EventWithNumberValue) => {
+                          const newHeight = Number(e.target.value);
+                          logTransformation(
+                            'resize-height',
+                            transformations.resize.height,
+                            newHeight,
+                          );
+                          setTransformations((prev: Transformations) => ({
                             ...prev,
-                            resize: {
-                              ...prev.resize,
-                              height: Number(e.target.value),
-                            },
-                          }))
-                        }
+                            resize: { ...prev.resize, height: newHeight },
+                          }));
+                        }}
                         type="number"
                         value={transformations.resize.height}
                       />
@@ -202,12 +248,18 @@ const TransformPage = () => {
                       className="w-full accent-purple-500"
                       max="180"
                       min="-180"
-                      onChange={(e: { target: { value: any } }) =>
-                        setTransformations((prev: any) => ({
+                      onChange={(e: EventWithNumberValue) => {
+                        const newRotation = Number(e.target.value);
+                        logTransformation(
+                          'rotate',
+                          transformations.rotate,
+                          newRotation,
+                        );
+                        setTransformations((prev: Transformations) => ({
                           ...prev,
-                          rotate: Number(e.target.value),
-                        }))
-                      }
+                          rotate: newRotation,
+                        }));
+                      }}
                       type="range"
                       value={transformations.rotate}
                     />
@@ -224,15 +276,18 @@ const TransformPage = () => {
                         <input
                           checked={transformations.filters.grayscale}
                           className="mr-2 accent-purple-500"
-                          onChange={(e: { target: { checked: any } }) =>
-                            setTransformations((prev: { filters: any }) => ({
+                          onChange={(e: EventWithBooleanValue) => {
+                            const newValue = e.target.checked;
+                            logTransformation(
+                              'filter-grayscale',
+                              transformations.filters.grayscale,
+                              newValue,
+                            );
+                            setTransformations((prev: Transformations) => ({
                               ...prev,
-                              filters: {
-                                ...prev.filters,
-                                grayscale: e.target.checked,
-                              },
-                            }))
-                          }
+                              filters: { ...prev.filters, grayscale: newValue },
+                            }));
+                          }}
                           type="checkbox"
                         />
                         Grayscale
@@ -241,15 +296,18 @@ const TransformPage = () => {
                         <input
                           checked={transformations.filters.sepia}
                           className="mr-2 accent-purple-500"
-                          onChange={(e: { target: { checked: any } }) =>
-                            setTransformations((prev: { filters: any }) => ({
+                          onChange={(e: EventWithBooleanValue) => {
+                            const newValue = e.target.checked;
+                            logTransformation(
+                              'filter-sepia',
+                              transformations.filters.sepia,
+                              newValue,
+                            );
+                            setTransformations((prev: Transformations) => ({
                               ...prev,
-                              filters: {
-                                ...prev.filters,
-                                sepia: e.target.checked,
-                              },
-                            }))
-                          }
+                              filters: { ...prev.filters, sepia: newValue },
+                            }));
+                          }}
                           type="checkbox"
                         />
                         Sepia
@@ -261,16 +319,22 @@ const TransformPage = () => {
                       Format
                     </label>
                     <select
-                      className="w-full rounded bg-neutral-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      onChange={(e: { target: { value: any } }) =>
-                        setTransformations((prev: any) => ({
+                      className="w-full rounded bg-neutral-600 px-3 py-2"
+                      onChange={(e: EventWithNumberValue) => {
+                        const newFormat = e.target.value;
+                        logTransformation(
+                          'format',
+                          transformations.format,
+                          newFormat,
+                        );
+                        setTransformations((prev: Transformations) => ({
                           ...prev,
-                          format: e.target.value,
-                        }))
-                      }
+                          format: newFormat,
+                        }));
+                      }}
                       value={transformations.format}
                     >
-                      <option value={currentImageFormat}>
+                      <option value={currentImageFormat || ''}>
                         {currentImageFormat?.toUpperCase()} (Current)
                       </option>
                       {getAvailableFormats().map((format: string) => (
