@@ -1,14 +1,11 @@
 import axios from 'axios';
 import React, { useCallback, useState } from 'react';
-import ReactCrop, { Crop } from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css';
 import { getUrl } from '../api/getUrl.tsx';
 import Footer from '../Components/Footer.tsx';
 import Navbar from '../Components/Navbar.tsx';
 import UploadImage from '../Components/UploadImage.tsx';
 
 interface Transformations {
-  crop: Crop;
   filters: {
     grayscale: boolean;
     sepia: boolean;
@@ -41,9 +38,7 @@ const TransformPage = () => {
   );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isCropping, setIsCropping] = useState(false);
   const [transformations, setTransformations] = useState<Transformations>({
-    crop: { height: 30, unit: '%', width: 30, x: 35, y: 35 },
     filters: { grayscale: false, sepia: false },
     format: 'png',
     resize: { height: 600, width: 800 },
@@ -75,35 +70,18 @@ const TransformPage = () => {
       setSelectedImage(file);
       setPreviewUrl(URL.createObjectURL(file));
       setTransformedImageUrl(null);
-      setIsCropping(true);
 
       // Determine the image format from the file type
       const format = file.type.split('/')[1];
       logTransformation('format', currentImageFormat, format);
       setCurrentImageFormat(format);
-      setTransformations((prev: Transformations) => {
+      setTransformations((prev: any) => {
         logTransformation('initial-format', prev.format, format);
         return { ...prev, format };
       });
     },
     [logTransformation, currentImageFormat],
   );
-
-  const handleCropComplete = useCallback(
-    (crop: Crop) => {
-      logTransformation('crop', transformations.crop, crop);
-      setTransformations((prev: Transformations) => ({ ...prev, crop }));
-    },
-    [transformations.crop, logTransformation],
-  );
-
-  const handleCropCancel = useCallback(() => {
-    setIsCropping(false);
-  }, []);
-
-  const handleCropConfirm = useCallback(() => {
-    setIsCropping(false);
-  }, []);
 
   const handleTransform = useCallback(async () => {
     if (!selectedImage) {
@@ -155,40 +133,7 @@ const TransformPage = () => {
               onImageSelect={handleImageSelect}
               previewUrl={previewUrl}
             />
-            {previewUrl && isCropping && (
-              <div className="mt-6 rounded-lg bg-neutral-700 p-6 shadow-lg">
-                <h2 className="mb-4 text-2xl font-bold text-purple-400">
-                  Crop Image
-                </h2>
-                <ReactCrop
-                  crop={transformations.crop}
-                  onChange={(c: Crop) =>
-                    setTransformations((prev: Transformations) => ({
-                      ...prev,
-                      crop: c,
-                    }))
-                  }
-                  onComplete={handleCropComplete}
-                >
-                  <img alt="Preview" src={previewUrl} />
-                </ReactCrop>
-                <div className="mt-4 flex justify-end space-x-4">
-                  <button
-                    className="rounded bg-gray-600 px-4 py-2 text-white hover:bg-gray-700"
-                    onClick={handleCropCancel}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="rounded bg-purple-600 px-4 py-2 text-white hover:bg-purple-700"
-                    onClick={handleCropConfirm}
-                  >
-                    Confirm Crop
-                  </button>
-                </div>
-              </div>
-            )}
-            {previewUrl && !isCropping && (
+            {previewUrl && (
               <div className="mt-6 rounded-lg bg-neutral-700 p-6 shadow-lg">
                 <h2 className="mb-6 border-b border-purple-400 pb-2 text-2xl font-bold text-purple-400">
                   Transformation Controls
@@ -344,12 +289,6 @@ const TransformPage = () => {
                       ))}
                     </select>
                   </div>
-                  <button
-                    className="mt-4 w-full rounded bg-purple-600 px-4 py-2 font-bold text-white hover:bg-purple-700"
-                    onClick={() => setIsCropping(true)}
-                  >
-                    Crop Image
-                  </button>
                   <button
                     className="mt-6 w-full transform rounded-lg bg-purple-600 px-4 py-3 font-bold text-white transition duration-300 ease-in-out hover:scale-105 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50"
                     disabled={isLoading}
